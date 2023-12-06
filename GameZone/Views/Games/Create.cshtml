@@ -1,0 +1,63 @@
+﻿@using GameZone.Settings;
+@model CreateGameFormViewModel
+@{
+    ViewData["Title"] = "Add Game";
+}
+<h5>
+    <i class="bi bi-plus-circle-dotted"></i>
+    Add A New Game
+</h5>
+ @*enctype="multipart/form-data" => To send photo for server .. as without this , the photo sent empty*@
+<form asp-controller="Games" enctype="multipart/form-data" method="post">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label asp-for="Name" class="form-label mt-4"></label>
+                <input type="text" class="form-control" asp-for="Name" placeholder="Enter Name">
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CategoryId" class="form-label mt-4"></label>
+                <select class="form-select" asp-for="CategoryId" asp-items="Model.Categories"
+                        data-placeholder="Select a category" data-minimum-results-for-search="Infinity">
+                    <option value=""></option>
+                </select>
+                <span asp-validation-for="CategoryId" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="SelectedDevices" class="form-label mt-4"></label>
+                <select class="form-select" asp-for="SelectedDevices" asp-items="Model.Devices"
+                        data-placeholder="Select devices">
+                    <option value=""></option>
+                </select>
+                <span asp-validation-for="SelectedDevices" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description" class="form-label mt-4"></label>
+                <textarea asp-for="Description" class="form-control" placeholder="Enter Description"></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Cover" class="form-label mt-4"></label>
+                <input type="file" class="form-control" asp-for="Cover"
+                data-rule-extension="@FileSettings.AllowedExtensions.Replace(".", string.Empty)"
+                data-msg-extension="Not Allowed Extension"
+                data-rule-filesize="@FileSettings.MaxFileSizeInBytes"
+                data-msg-filesize="Maximum Allowed size is @(FileSettings.MaxFileSizeInMB)MB"
+                onchange="previewImage(this);">
+                <small class="form-text text-muted">Only @FileSettings.AllowedExtensions files are allowed with max size @(FileSettings.MaxFileSizeInMB)MB.</small>
+                <span asp-validation-for="Cover" class="text-danger d-block"></span>
+            </div>
+            <button type="submit" class="btn btn-light text-black ">Save</button>
+        </div>
+        <div class="col-md-6 d-flex justify-content-center pt-4 overflow-hidden mt-4">
+            <img class="image-preview" id="image-preview" src="#" alt="Image Preview" style="max-width: 100%; display: none;">
+        </div>
+    </div>
+</form>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script src="~/js/newfolder/filesize-validation.js" asp-append-version="true"></script> @*asp-append-version="true"  => when i make changes to j.s file it reflect to here *@
+    <script src="~/js/newfolder/game-form.js" asp-append-version="true"></script> 
+}
